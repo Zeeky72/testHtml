@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Secret Message</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(120deg, #ff9a9e, #fad0c4);
+      font-family: 'Arial', sans-serif;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .input-container {
+      display: none;
+      margin-top: 20px;
+    }
+
+    input {
+      padding: 12px 20px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 2px solid #e91e63;
+      text-align: center;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 18px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      background-color: #fff;
+      margin-left: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: transform 0.2s;
+    }
+    button:hover { transform: scale(1.1); }
+
+    #message {
+      margin-top: 30px;
+      font-size: 48px;
+      color: #e91e63;
+      font-family: 'Pacifico', cursive;
+      opacity: 0;
+      text-align: center;
+    }
+
+    .heart, .confetti {
+      position: absolute;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .heart {
+      width: 20px;
+      height: 20px;
+      background: #e91e63;
+      transform: rotate(45deg);
+    }
+    .heart::before, .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #e91e63;
+      border-radius: 50%;
+    }
+    .heart::before { top: -10px; left: 0; }
+    .heart::after { left: 10px; top: 0; }
+
+    #retryButton {
+      display: none;
+      margin-top: 20px;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <button id="showInputButton">Enter the code</button>
+
+  <div class="input-container" id="inputContainer">
+    <input type="text" id="codeInput" placeholder="Enter code here">
+    <button id="enterButton">Enter</button>
+  </div>
+
+  <div id="message"></div>
+  <button id="retryButton">🥰😘❤️</button>
+
+  <script>
+    const showInputButton = document.getElementById('showInputButton');
+    const inputContainer = document.getElementById('inputContainer');
+    const enterButton = document.getElementById('enterButton');
+    const codeInput = document.getElementById('codeInput');
+    const message = document.getElementById('message');
+    const retryButton = document.getElementById('retryButton');
+
+    showInputButton.addEventListener('click', () => {
+      showInputButton.style.display = 'none';
+      inputContainer.style.display = 'flex';
+      codeInput.focus();
+    });
+
+    function displayMessage() {
+      inputContainer.style.display = 'none';
+      message.textContent = 'I love you Simi';
+      message.style.opacity = 0;
+      message.style.animation = 'fadeIn 1.5s forwards';
+      createHearts(40);
+      createConfetti(70);
+      retryButton.style.display = 'inline-block';
+    }
+
+    function resetPage() {
+      message.textContent = '';
+      retryButton.style.display = 'none';
+      showInputButton.style.display = 'inline-block';
+    }
+
+    enterButton.addEventListener('click', () => {
+      if(codeInput.value === '772277') {
+        displayMessage();
+      } else {
+        message.textContent = 'Wrong code, try again!';
+        message.style.opacity = 1;
+      }
+      codeInput.value = '';
+    });
+
+    codeInput.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter'){
+        enterButton.click();
+      }
+    });
+
+    retryButton.addEventListener('click', resetPage);
+
+    function createHearts(count){
+      for(let i=0;i<count;i++){
+        let heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.style.left = Math.random()*window.innerWidth+'px';
+        heart.style.top = Math.random()*window.innerHeight+'px';
+        let size = 10 + Math.random()*20;
+        heart.style.width = size+'px';
+        heart.style.height = size+'px';
+        heart.style.animation = `float ${3 + Math.random()*5}s linear forwards`;
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(),5000);
+      }
+    }
+
+    function createConfetti(count){
+      for(let i=0;i<count;i++){
+        let confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.width = '8px';
+        confetti.style.height = '8px';
+        confetti.style.backgroundColor = `hsl(${Math.random()*360}, 70%, 50%)`;
+        confetti.style.left = Math.random()*window.innerWidth+'px';
+        confetti.style.top = '-10px';
+        confetti.style.animation = `drop ${2 + Math.random()*3}s linear forwards`;
+        document.body.appendChild(confetti);
+        setTimeout(()=>confetti.remove(),4000);
+      }
+    }
+
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes float {
+        0% { transform: translateY(0) rotate(45deg); opacity: 0.8;}
+        100% { transform: translateY(-800px) rotate(45deg); opacity: 0; }
+      }
+      @keyframes drop {
+        0% { transform: translateY(0);}
+        100% { transform: translateY(800px); }
+      }
+    `;
+    document.head.appendChild(style);
+
+  </script>
+
+</body>
+</html>
